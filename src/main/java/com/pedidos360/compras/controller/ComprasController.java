@@ -9,13 +9,22 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/v1/compras")
 public class ComprasController {
 
+    private final com.pedidos360.compras.repository.PedidoRepository repository;
+
+    public ComprasController(com.pedidos360.compras.repository.PedidoRepository repository) {
+        this.repository = repository;
+    }
+
     @GetMapping("/carrito")
-    public String verCarrito() {
-        return "Carrito: Estás viendo tu carrito de compras (Autorizado por Rol User).";
+    public java.util.List<com.pedidos360.compras.model.Pedido> verCarrito(org.springframework.security.core.Authentication auth) {
+        // Obtenemos el email del usuario logueado desde el JWT (normalmente en preferred_username o upn)
+        String username = auth.getName(); 
+        return repository.findByUsuarioEmail(username);
     }
 
     @PostMapping("/carrito")
-    public String agregarAlCarrito() {
-        return "Carrito: Producto agregado exitosamente.";
+    public com.pedidos360.compras.model.Pedido agregarAlCarrito(@org.springframework.web.bind.annotation.RequestBody com.pedidos360.compras.model.Pedido pedido, org.springframework.security.core.Authentication auth) {
+        pedido.setUsuarioEmail(auth.getName());
+        return repository.save(pedido);
     }
 }
