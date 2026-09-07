@@ -47,8 +47,8 @@ public class SecurityConfig {
         NimbusJwtDecoder jwtDecoder = NimbusJwtDecoder.withJwkSetUri(jwkSetUri).build();
 
         OAuth2TokenValidator<Jwt> withIssuer = JwtValidators.createDefaultWithIssuer(issuerUri + tenantId + "/v2.0");
-        OAuth2TokenValidator<Jwt> withAudience = new JwtClaimValidator<String>(
-                "aud", aud -> aud != null && aud.equals(audience));
+        OAuth2TokenValidator<Jwt> withAudience = new JwtClaimValidator<List<String>>(
+                "aud", aud -> aud != null && aud.contains(audience));
         
         OAuth2TokenValidator<Jwt> validator = new DelegatingOAuth2TokenValidator<>(withIssuer, withAudience);
 
