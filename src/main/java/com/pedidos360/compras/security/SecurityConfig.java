@@ -79,6 +79,8 @@ public class SecurityConfig {
         
         JwtAuthenticationConverter converter = new JwtAuthenticationConverter();
         converter.setJwtGrantedAuthoritiesConverter(scopesConverter);
+        // El nombre del usuario es su correo (preferred_username) y no el sub
+        converter.setPrincipalClaimName("preferred_username");
         return converter;
     }
 }

@@ -27,4 +27,11 @@ public class ComprasController {
         pedido.setUsuarioEmail(auth.getName());
         return repository.save(pedido);
     }
+
+    // Lo llama el microservicio de órdenes una vez que la orden quedó registrada
+    @org.springframework.web.bind.annotation.DeleteMapping("/carrito")
+    public org.springframework.http.ResponseEntity<Void> vaciarCarrito(org.springframework.security.core.Authentication auth) {
+        repository.deleteByUsuarioEmail(auth.getName());
+        return org.springframework.http.ResponseEntity.noContent().build();
+    }
 }
