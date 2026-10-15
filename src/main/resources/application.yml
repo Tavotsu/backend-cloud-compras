@@ -22,5 +22,10 @@ spring:
     show-sql: true
 
 app:
+  security:
+    # Segundo proveedor de login (AWS Cognito)
+    cognito:
+      issuer-uri: ${COGNITO_ISSUER:https://cognito-idp.us-east-1.amazonaws.com/us-east-1_vZp9ZN52O}
+      client-id: ${COGNITO_CLIENT_ID:348a4vr0o6i0ja8u5u7jes7tki}
   cors:
     allowed-origins: ${CORS_ALLOWED_ORIGINS:http://localhost:4200,https://3.213.91.126}
