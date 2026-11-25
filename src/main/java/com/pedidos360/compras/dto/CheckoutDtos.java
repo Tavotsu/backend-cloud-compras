@@ -5,7 +5,7 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.PositiveOrZero;
 import jakarta.validation.constraints.Size;
 
-// Peticiones y respuestas de cupón y envío
+// Peticiones y respuestas de cupón, envío y canasta
 public final class CheckoutDtos {
 
     private CheckoutDtos() {
@@ -21,5 +21,10 @@ public final class CheckoutDtos {
     }
 
     public record EnvioResponse(String comuna, double costo, boolean gratis, String plazo) {
+    }
+
+    // Producto que el usuario sacó de la canasta antes de confirmar el pedido
+    public record QuitadoRequest(@NotNull Long productoId, @NotNull @PositiveOrZero Integer cantidad,
+                                 @PositiveOrZero Double valor) {
     }
 }

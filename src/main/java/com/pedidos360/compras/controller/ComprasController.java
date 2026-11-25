@@ -4,6 +4,7 @@ import com.pedidos360.compras.dto.CheckoutDtos.CuponRequest;
 import com.pedidos360.compras.dto.CheckoutDtos.CuponResponse;
 import com.pedidos360.compras.dto.CheckoutDtos.EnvioRequest;
 import com.pedidos360.compras.dto.CheckoutDtos.EnvioResponse;
+import com.pedidos360.compras.dto.CheckoutDtos.QuitadoRequest;
 import com.pedidos360.compras.dto.InteraccionEvent;
 import com.pedidos360.compras.messaging.producer.InteraccionPublisher;
 import com.pedidos360.compras.model.Pedido;
@@ -64,6 +65,15 @@ public class ComprasController {
                     return ResponseEntity.noContent().<Void>build();
                 })
                 .orElse(ResponseEntity.notFound().build());
+    }
+
+    // La canasta vive en el navegador hasta confirmar el pedido. Cuando el usuario saca
+    // un producto antes de eso, el front avisa aquí solo para publicar el evento.
+    @PostMapping("/carrito/quitado")
+    public ResponseEntity<Void> productoQuitado(@Valid @RequestBody QuitadoRequest request, Authentication auth) {
+        interaccionPublisher.publicar(InteraccionEvent.de(InteraccionEvent.CARRITO_QUITADO, auth.getName(),
+                request.productoId(), request.cantidad(), request.valor()));
+        return ResponseEntity.accepted().build();
     }
 
     // Lo llama el microservicio de órdenes una vez que la orden quedó registrada
